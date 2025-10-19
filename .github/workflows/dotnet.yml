@@ -25,7 +25,7 @@ jobs:
       - name: Compress artifact
         run: |
           cd publish
-          zip -r ../Zetacean.Automation.Framework.zip ./*
+          zip -r ../Zetacean.Automation.Framework.zip .
         #https://github.com/softprops/action-gh-release/issues/270
       - name: Bump version and push tag
         id: tag_version
