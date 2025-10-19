@@ -2,22 +2,27 @@ name: Compile & create docker image
 
 on:
   push:
-    branches: [ "development" ]
+    branches: ["development"]
   pull_request:
-    branches: [ "development" ]
+    branches: ["development"]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore --warnaserror
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet publish Zetacean.Automation.Framework.Tests/Zetacean.Automation.Framework.Tests.csproj -c Release -r linux-x64 --self-contained false -o publish --warnaserror
+      - name: Compress artifact
+        run: zip -r Zetacean.Automation.Framework.zip publish/
+      - name: Release framework
+        uses: softprops/action-gh-release@v2.4.1
+        with:
+          files: Zetacean.Automation.Framework.zip
