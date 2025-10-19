@@ -23,7 +23,9 @@ jobs:
       - name: Build
         run: dotnet publish Zetacean.Automation.Framework.Tests/Zetacean.Automation.Framework.Tests.csproj -c Release -r linux-x64 --self-contained false -o publish --warnaserror
       - name: Compress artifact
-        run: zip -r Zetacean.Automation.Framework.zip publish/
+        run: |
+          cd publish
+          zip -r ../Zetacean.Automation.Framework.zip ./*
         #https://github.com/softprops/action-gh-release/issues/270
       - name: Bump version and push tag
         id: tag_version
