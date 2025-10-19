@@ -2,6 +2,8 @@ name: Compile & create docker image
 
 on:
   push:
+    tags:
+      - "v*.*.*"
     branches: ["development"]
   pull_request:
     branches: ["development"]
