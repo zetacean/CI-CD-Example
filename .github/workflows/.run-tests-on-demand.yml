@@ -1,0 +1,14 @@
+name: Deploy DotNet project to Azure Function App
+
+on: workflow_dispatch
+
+
+jobs:
+  run-on-demand:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: robinraju/release-downloader@v1
+        with:
+          latest: true
+          extract: true
