@@ -24,20 +24,44 @@ namespace Zetacean.Automation.Framework.Tests
             }
         }
 
-        [Test]
-        public async Task TestSimpleLogin()
+        private async Task FillLoginInformation(string username)
         {
             await s_driver.GoToUrl("https://www.saucedemo.com/");
             var txtUsername = new LogElement(s_driver.FindLocator("#user-name"));
             var txtPassword = new LogElement(s_driver.FindLocator("#password"));
             var btnLogin = new LogElement(s_driver.FindLocator("#login-button"));
+
+            await txtUsername.TypeText(username);
+            await txtPassword.TypeText("secret_sauce");
+            await btnLogin.Click();
+        }
+
+        [Test]
+        public async Task TestSimpleLogin()
+        {
+            await FillLoginInformation("standard_user");
             var txtFirstProduct = new LogElement(
                 s_driver.FindLocator("[data-test='inventory-list'] > div:nth-child(1)")
             );
-            await txtUsername.TypeText("standard_user");
-            await txtPassword.TypeText("secret_sauce");
-            await btnLogin.Click();
-            Assert.That(await txtFirstProduct.Displayed(), Is.True);
+            Assert.That(
+                await txtFirstProduct.Displayed(),
+                Is.True,
+                "The element was not displayed"
+            );
+        }
+
+        [Test]
+        public async Task TestSimpleLoginFailed()
+        {
+            await FillLoginInformation("locked_out_user");
+            var txtFirstProduct = new LogElement(
+                s_driver.FindLocator("[data-test='inventory-list'] > div:nth-child(1)")
+            );
+            Assert.That(
+                await txtFirstProduct.Displayed(),
+                Is.True,
+                "The element was not displayed"
+            );
         }
     }
 }
