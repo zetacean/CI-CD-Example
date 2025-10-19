@@ -1,0 +1,31 @@
+name: Run tests on demand
+
+on: workflow_dispatch
+
+jobs:
+  run-on-demand:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: robinraju/release-downloader@v1
+        with:
+          latest: true
+          extract: true
+          fileName: Zetacean.Automation.Framework.zip
+          out-file-path: .
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Install PowerShell
+        uses: PSModule/install-powershell@v1
+        with:
+          Version: 7.5.0
+      - name: Give Playwright Node permissions
+        run: chmod +x .playwright/node/linux-x64/node
+      - name: Install Playwright
+        shell: pwsh
+        run: ./playwright.ps1 install chromium
+      - name: Run tests
+        run: dotnet vstest *.Tests.dll --logger:trx;LogFileName=test_results.trx

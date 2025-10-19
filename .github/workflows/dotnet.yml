@@ -1,0 +1,37 @@
+name: Compile & create docker image
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches: ["development"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet publish Zetacean.Automation.Framework.Tests/Zetacean.Automation.Framework.Tests.csproj -c Release -r linux-x64 --self-contained false -o publish --warnaserror
+      - name: Compress artifact
+        run: |
+          cd publish
+          zip -r ../Zetacean.Automation.Framework.zip .
+        #https://github.com/softprops/action-gh-release/issues/270
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release framework
+        uses: softprops/action-gh-release@v2.4.1
+        with:
+          files: Zetacean.Automation.Framework.zip
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
