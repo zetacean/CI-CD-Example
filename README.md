@@ -18,6 +18,22 @@ Si el análisis es exitoso, se generará un **artefacto**, que luego se utilizar
 
 Una vez que el artefacto está compilado, puede ser consumido desde otro pipeline correspondiente a la etapa de **CD**, donde se realiza la ejecución de pruebas automatizadas o cualquier otro despliegue necesario.
 
-## Referencias
+## Estructura del proyecto
+```text  
+├───📁.github
+│   └───📁workflows
+│           🗎 .run-tests-on-demand.yml ⚡ Pipeline para ejecutar las pruebas a demanda
+│           🗎 dotnet.yml ⚡ Pipeline de compilación
+├───📁Zetacean.Automation.Framework.Core ⚡ Componentes del framework de pruebas
+└───📁Zetacean.Automation.Framework.Tests ⚡ Pruebas que ejecuta el framework
+```
 
+## Resultados
+### [Pipeline de creación del release/artefacto](https://github.com/zetacean/CI-CD-Example/actions/runs/18638486183/job/53133154701)
+![alt text](img/build.png)
+
+### [Pipeline de ejecución de pruebas a demanda](https://github.com/zetacean/CI-CD-Example/actions/runs/18638504075/job/53133197105)
+![alt text](img/test.png)
+
+## Referencias
 - [GitLab - ¿Qué es la CI/CD?](https://about.gitlab.com/es/topics/ci-cd/)
