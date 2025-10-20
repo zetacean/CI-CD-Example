@@ -1,4 +1,4 @@
-name: Compile & create docker image
+name: Compile & create artifact
 
 on:
   pull_request:
